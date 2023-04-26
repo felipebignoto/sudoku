@@ -19,7 +19,7 @@
                 <configuration>
                     <archive>
                         <manifest>
-                            <mainClass>sudoku.sudoku</mainClass>
+                            <mainClass>com.mycompany.sudoku.Sudoku</mainClass>
                         </manifest>
                     </archive>
                     <descriptorRefs>
