@@ -20,28 +20,39 @@ public class Sudoku {
         if(x == 0){//selecionou o jogo aleatorio
             
             int matr[][] = criaMatriz();
-            String quantidadeString = JOptionPane.showInputDialog( "Digite a quantidade de números para serem sorteados: ");
+//Limite de quantidade de numero aleatorio
+            String quantidadeString = JOptionPane.showInputDialog( "Digite a quantidade de números para serem sorteados[0-60]: ");
             int quantidade = Integer.parseInt( quantidadeString);
             
             int valor,linha,coluna;
-            for(int i =0; i<quantidade; i++){//ARRUMAR PARA DENTRO DE UM FOR
+            for(int i =0; i<quantidade; i++){
                 
+                for(int k = 0; k <10; ){
                     Random aleatorio = new Random();
                     valor = aleatorio.nextInt((TAMANHO_MAXIMO - 1) + 1) + 1;
                     linha = aleatorio.nextInt((TAMANHO_MAXIMO - 1 - 0) + 1) + 0;
                     coluna = aleatorio.nextInt((TAMANHO_MAXIMO - 1 - 0) + 1) + 0;
-                    System.out.println(linha + " " + coluna + " " + valor);
-                    matr[linha][coluna] = valor;
-                
+                    if( ehValido(matr, valor, linha, coluna) == true){
+                        k = 20;
+                        matr[linha][coluna] = valor;
+                    }    
+                }
             }
             
-            //imprimeJogo(matr);
+            
+            //impressão
             for(int i = 0; i < TAMANHO_MAXIMO; i++){
-            for(int j = 0; j< TAMANHO_MAXIMO; j++){
-                System.out.print(matr[i][j] + " ");
+                if(i%3 == 0 && i != 0 ){
+                    System.out.println("---------");
+                } 
+                for(int j = 0; j< TAMANHO_MAXIMO; j++){
+                    if(j%3 == 0 && j != 0){
+                        System.out.print("|");
+                    }
+                    System.out.print(matr[i][j] + " ");
+                }
+                System.out.println();
             }
-            System.out.println();
-        }
         }
         
         else{
@@ -120,12 +131,5 @@ public class Sudoku {
         return x;
     }
     
-    private static void imprimeJogo(int [][] matr){
-        for(int i = 0; i < TAMANHO_MAXIMO; i++){
-            for(int j = 0; j< TAMANHO_MAXIMO; j++){
-                System.out.print(matr[i][j] + " ");
-            }
-            System.out.println();
-        }
-    }
+    
 }
