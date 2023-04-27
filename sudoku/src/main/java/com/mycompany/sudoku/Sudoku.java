@@ -5,6 +5,7 @@
 package com.mycompany.sudoku;
 import javax.swing.JOptionPane;
 import java.util.Random;
+import java.util.*;
 /**
  *
  * @author felip
@@ -20,31 +21,27 @@ public class Sudoku {
         if(x == 0){//selecionou o jogo aleatorio
             
             int matr[][] = criaMatriz();
-//Limite de quantidade de numero aleatorio
+//Limite de quantidade de numero aleatorio e verificar se é numero
             String quantidadeString = JOptionPane.showInputDialog( "Digite a quantidade de números para serem sorteados[0-60]: ");
-            int quantidade = Integer.parseInt( quantidadeString);
-            
+            int quantidade = Integer.parseInt(quantidadeString);
             int valor,linha,coluna;
             for(int i =0; i<quantidade; i++){
-                
-                for(int k = 0; k <10; ){
+                for(;;){
                     Random aleatorio = new Random();
                     valor = aleatorio.nextInt((TAMANHO_MAXIMO - 1) + 1) + 1;
                     linha = aleatorio.nextInt((TAMANHO_MAXIMO - 1 - 0) + 1) + 0;
                     coluna = aleatorio.nextInt((TAMANHO_MAXIMO - 1 - 0) + 1) + 0;
                     if( ehValido(matr, valor, linha, coluna) == true){
-                        k = 20;
                         matr[linha][coluna] = valor;
-                    }    
+                        break;
+                    }   
                 }
             }
-            
-            
             //impressão
             for(int i = 0; i < TAMANHO_MAXIMO; i++){
                 if(i%3 == 0 && i != 0 ){
                     System.out.println("---------");
-                } 
+                }
                 for(int j = 0; j< TAMANHO_MAXIMO; j++){
                     if(j%3 == 0 && j != 0){
                         System.out.print("|");
@@ -54,17 +51,20 @@ public class Sudoku {
                 System.out.println();
             }
         }
-        
         else{
             if(x == 1){//selecionou o definir jogo 
-                //int matr[][] = criaMatriz();
+                /*int valores[];
+                String valoresIniciais = JOptionPane.showInputDialog( "Digite os valores iniciais no formato ([linha],[coluna],[valor]): ");
+                for(int i = 0; i < valoresIniciais.length();){
+                    if(valoresIniciais[i] > 0 && val < 9){
+                        
+                    }
+                }*/
             }
             else{//não irá iniciar o jogo
                JOptionPane.showMessageDialog(null, "Saindo");
             }
         }
-        
-    
     }
     
     private static boolean numeroNaPosicao(int [][] matr,int linha, int coluna){
