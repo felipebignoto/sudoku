@@ -7,10 +7,6 @@ package com.mycompany.sudoku;
 import java.util.Random;
 import javax.swing.JOptionPane;
 
-/**
- *
- * @author felip
- */
 public class jogo {
     
     private final int TAMANHO_MAXIMO = 9;
@@ -21,6 +17,7 @@ public class jogo {
         int x = menuInicial();
         if(x == 0 || x == 1){
             inicioJogo(x);
+            imprime();
             
         }else{
             JOptionPane.showMessageDialog(null, "Saindo");
@@ -47,15 +44,10 @@ public class jogo {
                                 break;
                             }
                         }
-                    }
-                    imprime();
-                    //String mensagem = Arrays.deepToString(matr);
-                    //JOptionPane.showMessageDialog(null, "Seu jogo incial eh: " + mensagem);
-                    
+                    }  
                 }
                 else{
                     JOptionPane.showMessageDialog(null, "Entrada inválida, finalizando..");
-                   
                 }
             }catch(Exception err){
                 JOptionPane.showMessageDialog(null, "Entrada inválida, finalizando..");
@@ -64,10 +56,20 @@ public class jogo {
             
         }
         else{//selecionou o definir jogo
-            
-        }
-        
-        
+            criaMatriz();
+            String valoresInicias = JOptionPane.showInputDialog( "Digite os valores inicias no formato ([linha],[coluna],[valor]: ");
+            int tamanho = valoresInicias.length();
+            int quantidadeDeValores = tamanho/7;
+            int valor, linha, coluna;
+            for(int i = 0; i<quantidadeDeValores;i++){
+                linha = Character.getNumericValue(valoresInicias.charAt(7*i + 1));  
+                coluna = Character.getNumericValue(valoresInicias.charAt(7*i + 3)); 
+                valor = Character.getNumericValue(valoresInicias.charAt(7*i + 5)); 
+                if(ehValido(valor, linha, coluna) == true){
+                    matr[linha][coluna] = valor;
+                }
+            }
+        } 
     }
     
     private  boolean numeroNaPosicao(int linha, int coluna){
