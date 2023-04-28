@@ -18,12 +18,56 @@ public class jogo {
         if(x == 0 || x == 1){
             inicioJogo(x);
             imprime();
+            jogadas();
             
         }else{
             JOptionPane.showMessageDialog(null, "Saindo");
         }
         JOptionPane.showMessageDialog(null, "Jogo finalizado!");
     } 
+    
+    private void jogadas(){
+        Object[] options = {"Adicionar jogada", "Remover jogada", "Verificar", "Sair"};
+        int linha = 0, coluna = 0, valor,x;
+
+        do{
+            x = JOptionPane.showOptionDialog(null, "Selecione uma opção:", "Menu!", JOptionPane.DEFAULT_OPTION, JOptionPane.INFORMATION_MESSAGE, null, options, options[0]);
+            switch (x) {
+                case 0: //adicionar jogada
+                    String valoresParaAdicionar = JOptionPane.showInputDialog("Digite os valores no formato ([linha],[coluna],[valor]): ");
+                    linha = Character.getNumericValue(valoresParaAdicionar.charAt(1));
+                    coluna = Character.getNumericValue(valoresParaAdicionar.charAt(3));
+                    valor = Character.getNumericValue(valoresParaAdicionar.charAt(5));
+                    matr[linha][coluna] = valor;
+                    System.out.println();
+                    imprime();
+                    break;
+
+                case 1: // remover jogada
+                   
+                    String valoreParaRemover = JOptionPane.showInputDialog("Digite os valores no formato ([linha],[coluna]): ");
+                    linha = Character.getNumericValue(valoreParaRemover.charAt(1));
+                    coluna = Character.getNumericValue(valoreParaRemover.charAt(3));
+                    matr[linha][coluna] = 0;
+                    System.out.println();
+                    imprime();
+                    break;
+
+                case 2://verificar
+                    break;
+
+                case 3://sair por opção
+                    JOptionPane.showMessageDialog(null, "Saindo..");
+                    break;
+
+                default://sair por entrada inválida
+                    if (x != 3) {
+                        JOptionPane.showMessageDialog(null, "Saindo..");
+                    }
+                    break;
+            }
+        } while (x ==0 || x==1 || x==2);
+    }
     
     private void inicioJogo(int x){
         if(x == 0){//selecionou o jogo aleatorio
