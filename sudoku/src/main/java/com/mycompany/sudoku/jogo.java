@@ -28,7 +28,7 @@ public class jogo {
     
     private void jogadas(){
         Object[] options = {"Adicionar jogada", "Remover jogada", "Verificar", "Sair"};
-        int linha = 0, coluna = 0, valor,x;
+        int linha, coluna, valor,x;
 
         do{
             x = JOptionPane.showOptionDialog(null, "Selecione uma opção:", "Menu!", JOptionPane.DEFAULT_OPTION, JOptionPane.INFORMATION_MESSAGE, null, options, options[0]);
@@ -54,19 +54,113 @@ public class jogo {
                     break;
 
                 case 2://verificar
+                    int resultadoVerificacao = verifica();
+                    System.out.println(resultadoVerificacao);
+                    if(resultadoVerificacao == 0){
+                        JOptionPane.showMessageDialog(null, "Verificado, pode continuar");
+                    }
+                    else if(resultadoVerificacao == 1){
+                        JOptionPane.showMessageDialog(null, "Verificado, erro na linha ");
+                        x = 3;
+                    }
+                    else if(resultadoVerificacao == 2){
+                        JOptionPane.showMessageDialog(null, "Verificado, erro na coluna ");
+                        x = 3;
+                    } else{
+                        JOptionPane.showMessageDialog(null, "Verificado, erro no bloco ");
+                        x = 3;
+                    }
+                   
+                    
                     break;
 
                 case 3://sair por opção
-                    JOptionPane.showMessageDialog(null, "Saindo..");
+                    JOptionPane.showMessageDialog(null, "Saindo...");
                     break;
 
                 default://sair por entrada inválida
                     if (x != 3) {
-                        JOptionPane.showMessageDialog(null, "Saindo..");
+                        JOptionPane.showMessageDialog(null, "Saindo...");
                     }
                     break;
             }
         } while (x ==0 || x==1 || x==2);
+    }
+    
+    private int verifica(){
+        int x =0;
+        for(int linha = 0; linha < TAMANHO_MAXIMO; linha++){
+            for(int coluna =0; coluna  <TAMANHO_MAXIMO; coluna++){
+                if(matr[linha][coluna] != 0){
+                    x = teste(linha, coluna);
+                    if(x != 0){
+                        break;
+                    }
+                }
+            }
+        }
+        return x;
+    }
+    
+    private int teste(int linha, int coluna){
+        int x = 0;
+        
+        for(int c = 0; c<TAMANHO_MAXIMO; c++){
+            if(matr[linha][coluna] == matr[linha][c] && matr[linha][c] != 0){
+                x = 1;
+                System.out.println(linha + " " + coluna);
+                return x;
+                
+            }
+        }
+        
+        for(int l = 0; l<TAMANHO_MAXIMO; l++){
+            if(matr[linha][coluna] == matr[l][coluna] && matr[l][coluna] != 0){
+                x = 2;
+                return x;
+            }
+        }
+        
+        int inicioBlocoLinha = linha - linha%3;
+        int inicioBlocoColuna = coluna - coluna%3;
+        for(int i = inicioBlocoLinha; i < inicioBlocoLinha + 3; i++ ){
+            for(int j = inicioBlocoColuna; j < inicioBlocoColuna +3; j++){
+                if(matr[linha][coluna] == matr[i][j] && matr[i][j] != 0){
+                    x = 3;
+                    return x;
+                }
+            }
+        }
+        
+        return x;
+    }
+    
+    /*
+    private boolean verificacao(){
+        for(int linha =0; linha < TAMANHO_MAXIMO; linha++){
+            for(int coluna = 0; coluna < TAMANHO_MAXIMO; coluna++){
+                if(matr[linha][coluna]==0){
+                    for(int numeroTeste = 1; numeroTeste <= TAMANHO_MAXIMO; numeroTeste++){
+                        if(ehValido(numeroTeste, linha, coluna)){
+                            matr[linha][coluna] = numeroTeste;
+                            
+                            if(verificacao()){
+                                return true;
+                            }
+                            else{
+                                matr[linha][coluna] = 0;
+                            }
+                        }
+                    }
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+    */
+    private void  Finaljogo(){
+        
     }
     
     private void inicioJogo(int x){
@@ -94,7 +188,7 @@ public class jogo {
                     JOptionPane.showMessageDialog(null, "Entrada inválida, finalizando..");
                 }
             }catch(Exception err){
-                JOptionPane.showMessageDialog(null, "Entrada inválida, finalizando..");
+                JOptionPane.showMessageDialog(null, "Entrada inválida, finalizando...");
             }
             
             
