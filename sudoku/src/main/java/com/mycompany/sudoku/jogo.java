@@ -25,16 +25,16 @@ public class jogo {
         }
         JOptionPane.showMessageDialog(null, "Jogo finalizado!");
     }
-    
-    private boolean verificacaoTotalAuxiliar(int [][] matrizTeste){
-        
+
+    private boolean verificacaoTotalAuxiliar(int[][] matrizTeste) {
+
         for (int l = 0; l < TAMANHO_MAXIMO; l++) {
             for (int c = 0; c < TAMANHO_MAXIMO; c++) {
                 if (matrizTeste[l][c] == 0) {
                     for (int numeroTeste = 1; numeroTeste <= TAMANHO_MAXIMO; numeroTeste++) {
                         if (ehValido(numeroTeste, l, c)) {
                             matrizTeste[l][c] = numeroTeste;
-                            if (verificacaoTotalAuxiliar(matrizTeste) == true){
+                            if (verificacaoTotalAuxiliar(matrizTeste) == true) {
                                 return true;
                             } else {
                                 matrizTeste[l][c] = 0;
@@ -43,7 +43,6 @@ public class jogo {
                     }
                     return false;
                 }
-                
             }
         }
         return true;
@@ -104,12 +103,12 @@ public class jogo {
         if (x == 0) {//selecionou o jogo aleatorio
             criaMatriz();
             String quantidadeString = JOptionPane.showInputDialog("Digite a quantidade de números para serem sorteados[0-60]: ");
-            try { 
+            try {
                 int quantidade = Integer.parseInt(quantidadeString);
                 System.out.println(quantidade);
                 int valor, linha, coluna;
                 if (quantidade <= 60 && quantidade >= 0) {
-                    for (int i = 0; i < quantidade; i++) {
+                    for (int i = 0; i < quantidade; i++){
                         for (;;) {
                             Random aleatorio = new Random();
                             valor = aleatorio.nextInt((TAMANHO_MAXIMO - 1) + 1) + 1;
@@ -122,15 +121,16 @@ public class jogo {
                             }
                         }
                         System.out.println("Saiu do for sem condicao " + i);
-                    }System.out.println("Saiu do for de quantidades");
+                        i = i+ 1;
+                        System.out.println("Saiu do for sem condicao " + i);
+                    }
+                    System.out.println("Saiu do for de quantidades");
                 } else {
                     JOptionPane.showMessageDialog(null, "Entrada inválida, finalizando..");
                 }
             } catch (Exception err) {
                 JOptionPane.showMessageDialog(null, "Entrada inválida, finalizando...");
             }
-            
- 
 
         } else {//selecionou o definir jogo
             criaMatriz();
