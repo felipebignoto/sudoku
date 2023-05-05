@@ -1,14 +1,12 @@
 package com.mycompany.sudoku;
 
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Random;
 import javax.swing.JOptionPane;
 
 public class jogo {
 
     private final int TAMANHO_MAXIMO = 9;
-    private final int[][] matr = new int[9][9];
+    private int[][] matr = new int[9][9];
     private final int[][] tabuleiro = new int[9][9];
 
     public void main(String[] args) {
@@ -16,9 +14,8 @@ public class jogo {
         int x = menuInicial();
         if (x == 0 || x == 1) {
             inicioJogo(x);
-            System.out.println("Tabuleiro: ");
-            imprime(matr);
-            
+            System.out.println("Seu jogo incial eh: ");
+            imprime(tabuleiro);
             jogadas();
             
 
@@ -78,24 +75,15 @@ public class jogo {
             try {
                 int quantidade = Integer.parseInt(quantidadeString);
                 if (quantidade <= 60 && quantidade >= 0) {
-                    if (quantidade >= 9) {
-                        //Prencho a diagonal toda
-                        preenchDiagonal(9);
-                        solucaoSudoku();
-                        System.out.println("saiu da solucao sudoku");
-                        criaTabuleiro(quantidade);
-                    }
-                    else{
-                        // Preenche diagonal principal do tabuleiro com o numero passado de números aleatórios de 1 a 9 
-                        preenchDiagonal(quantidade);
-                        solucaoSudoku();
-                        criaTabuleiro(0);
-                    }
+                    preenchDiagonal();
+                    solucaoSudoku();
+                    criaTabuleiro(quantidade);
+                    
                 } else {
                     JOptionPane.showMessageDialog(null, "Entrada inválida, pois o numero eata fora do intervalo. O jogo sera inicaido com o tabuleiro vazio.");
                 }
             } catch (Exception err) {
-                JOptionPane.showMessageDialog(null, "Erro: Nenhuma opção selecionda. O jogo sera inicaido com o tabuleiro vazio.");
+                JOptionPane.showMessageDialog(null, "Erro: Nenhuma opção selecionda. O jogo sera iniciado com o tabuleiro vazio.");
             }
 
         } else {//selecionou o definir jogo
@@ -140,26 +128,35 @@ public class jogo {
     private boolean solucaoSudoku(){
         
         boolean verifica = false;
-        int linha = -1, coluna = -1;
-        for (linha = 0; linha < TAMANHO_MAXIMO && verifica == false; linha++) {
-            for (coluna = 0; coluna < TAMANHO_MAXIMO; coluna++) {
+        int linha;
+        int coluna= 0;
+        for (linha = 0; (linha < TAMANHO_MAXIMO); linha++) {
+            for (coluna = 0; (coluna < TAMANHO_MAXIMO) ; coluna++) {
+                System.out.println(linha + " " + coluna + " " + matr[linha][coluna]);
+
                 if (matr[linha][coluna] == 0) {
                     verifica = true;
                     break;
                 }
+                
             }
+            if(verifica){
+                    break;
+                }
         }
         
-        if(linha == -1){
+        if(verifica == false){
             return true;
         }
-        System.out.println(linha + "--- "+coluna);
         for(int numero = 1; numero <= 9; numero++){
-            imprime(matr);
-            System.out.println(linha + " "+coluna);
-            if(ehValido(numero, linha, coluna)){
-                matr[linha][coluna] = numero;
+            //imprime(matr);
+
+            if(ehValido(numero, linha, coluna)==true){
                 imprime(matr);
+                System.out.println("-----");
+                matr[linha][coluna] = numero;
+                //imprime(matr);
+
                 if(solucaoSudoku()==true){
                     return true;
                 }
@@ -171,11 +168,11 @@ public class jogo {
         return false;
     }
     
-    private void preenchDiagonal(int valor){
+    private void preenchDiagonal(){
         int indice = 0;
-        while(indice < valor){
+        while(indice < TAMANHO_MAXIMO){
             Random aleatorio = new Random();
-            valor = aleatorio.nextInt((TAMANHO_MAXIMO - 1) + 1) + 1;
+            int valor = aleatorio.nextInt((TAMANHO_MAXIMO - 1) + 1) + 1;
             if(ehValido(valor, indice, indice) == true){
                 matr[indice][indice] = valor;
                 indice++;
@@ -226,11 +223,11 @@ public class jogo {
         return !numeroNaLinha(valor, linha) && !numeroNaColuna(valor, coluna) && !numeroNoBloco(valor, linha, coluna) && !numeroNaPosicao(linha, coluna);
     }
 
-    public void criaMatriz(int[][] tabuleiro) {
+    public void criaMatriz(int[][] matriz) {
 
         for (int i = 0; i < TAMANHO_MAXIMO; i++) {
             for (int j = 0; j < TAMANHO_MAXIMO; j++) {
-                tabuleiro[i][j] = 0;
+                matriz[i][j] = 0;
             }
         }
     }
@@ -241,7 +238,7 @@ public class jogo {
         return x;
     }
 
-    private void imprime(int[][] tabuleiro) {
+    private void imprime(int[][] matriz) {
         for (int i = 0; i < TAMANHO_MAXIMO; i++) {
             if (i % 3 == 0 && i != 0) {
                 System.out.println("---------");
@@ -250,203 +247,11 @@ public class jogo {
                 if (j % 3 == 0 && j != 0) {
                     System.out.print("|");
                 }
-                System.out.print(tabuleiro[i][j] + " ");
+                System.out.print(matriz[i][j] + " ");
             }
             System.out.println();
         }
     }
     
 }
-    //--------Funções não usadas-------------------
-
-/*
-    
- private boolean preencherTabuleiro(int[][] tabuleiro, int linha, int coluna) {
-        if (coluna == 9) {
-            coluna = 0;
-            linha++;
-            if (linha == 9) {
-                return true; // Tabuleiro preenchido com sucesso!
-            }
-        }
-
-        if (tabuleiro[linha][coluna] != 0) {
-            return preencherTabuleiro(tabuleiro, linha, coluna + 1);
-        }
-
-        ArrayList<Integer> numeros = new ArrayList<>();
-        for (int i = 1; i <= 9; i++) {
-            numeros.add(i);
-        }
-        Collections.shuffle(numeros);
-
-        for (int i = 0; i < numeros.size(); i++) {
-            int num = numeros.get(i);
-            if (ehValido(num, linha, coluna)) {
-                tabuleiro[linha][coluna] = num;
-                if (preencherTabuleiro(tabuleiro, linha, coluna + 1)) {
-                    return true;
-                }
-            }
-        }
-
-        tabuleiro[linha][coluna] = 0;
-        return false;
-    }    
-
-private boolean verificacaoTotalAuxiliar(int[][] matrizTeste) {
-
-        for (int l = 0; l < TAMANHO_MAXIMO; l++) {
-            for (int c = 0; c < TAMANHO_MAXIMO; c++) {
-                if (matrizTeste[l][c] == 0) {
-                    for (int numeroTeste = 1; numeroTeste <= TAMANHO_MAXIMO; numeroTeste++) {
-                        if (ehValido(numeroTeste, l, c)) {
-                            matrizTeste[l][c] = numeroTeste;
-                            if (verificacaoTotalAuxiliar(matrizTeste) == true) {
-                                return true;
-                            } else {
-                                matrizTeste[l][c] = 0;
-                            }
-                        }
-                    }
-                    return false;
-                }
-            }
-        }
-        return true;
-    }
-
-    private boolean verificacaoTotal(int valor, int linha, int coluna) {
-        int[][] matrizTeste = new int[9][9];
-        //matrizTeste = matr;
-        for (int l = 0; l < TAMANHO_MAXIMO; l++) {
-            for (int c = 0; c < TAMANHO_MAXIMO; c++) {
-                matrizTeste[l][c] = matr[l][c];
-            }
-        }
-
-        matrizTeste[linha][coluna] = valor;
-        //System.out.println("passou aqui" + verificacaoTotalAuxiliar(matrizTeste));
-        return verificacaoTotalAuxiliar(matrizTeste);
-    }
-    
-    private boolean preencherTabuleiro(int linha, int coluna) {
-        System.out.println("Entrou na funcao preencher");
-        if (coluna == TAMANHO_MAXIMO) {
-            coluna = 0;
-            linha++;
-            if (linha == TAMANHO_MAXIMO) {
-                return true; // Tabuleiro preenchido com sucesso!
-            }
-        }
-
-        if (matr[linha][coluna] != 0) {
-            return preencherTabuleiro(linha, coluna + 1);
-        }
-
-        Random rand = new Random();
-        int[] numeros = {1, 2, 3, 4, 5, 6, 7, 8, 9};
-        for (int i = 0; i < numeros.length; i++) {
-            int indiceAleatorio = rand.nextInt(numeros.length);
-            int num = numeros[indiceAleatorio];
-            System.out.println(num);
-            numeros[indiceAleatorio] = numeros[i];
-            if (ehValido(num, linha, coluna)) {
-                matr[linha][coluna] = num;
-                System.out.println( matr[linha][coluna]);
-                if (preencherTabuleiro(linha, coluna + 1) == true) {
-                    System.out.println("Entrou no if de preencher");
-                    return true;
-                }
-            }
-        }
-
-        matr[linha][coluna] = 0;
-        return false;
-    }
-    
-    private boolean preencherTabuleiro(int[][] tabuleiro, int linha, int coluna) {
-        if (coluna == TAMANHO_MAXIMO) {
-            coluna = 0;
-            linha++;
-            if (linha == TAMANHO_MAXIMO) {
-                return true; // Tabuleiro preenchido com sucesso!
-            }
-        }
-
-        if (matr[linha][coluna] != 0) {
-            return preencherTabuleiro(tabuleiro, linha, coluna + 1);
-        }
-
-        ArrayList<Integer> numeros = new ArrayList<>();
-        for (int i = 1; i <= 9; i++) {//Adiciono os numeros na lista
-            numeros.add(i);
-        }
-        Collections.shuffle(numeros);//embaralho a lista
-
-        for (int i = 0; i < numeros.size(); i++) {
-            int num = numeros.get(i);
-            if (ehValido(num, linha, coluna) == true) {
-                tabuleiro[linha][coluna] = num;
-                if (preencherTabuleiro(tabuleiro,linha, coluna + 1) == true) {
-                    return true;
-                }
-            }
-        }
-        tabuleiro[linha][coluna] = 0;
-        for(int i = 0; i < 9; i++) {
-                if (i % 3 == 0 && i != 0) {
-                    System.out.println("---------");
-                }
-                for (int j = 0; j < 9; j++) {
-                    if (j % 3 == 0 && j != 0) {
-                        System.out.print("|");
-                    }
-                    System.out.print(tabuleiro[i][j] + " ");
-                }
-                System.out.println();
-            }
-        return false;
-    }
-
-    // Preenche diagonal principal do tabuleiro com 9 números aleatórios de 1 a 9
-                        for (int indice = 0; indice < TAMANHO_MAXIMO; indice++) {
-                            for (;;) {
-                                Random aleatorio = new Random();
-                                valor = aleatorio.nextInt((TAMANHO_MAXIMO - 1) + 1) + 1;
-                                if (ehValido(valor, indice, indice) == true) {
-                                    gabarito[indice][indice] = valor;
-                                    break;
-                                }
-                            }
-                        }
-                        // Preenche o restante do tabuleiro usando backtracking
-                       preencherTabuleiro(gabarito, 0, 0);
-                        /*
-                        for(int q = 0; q < quantidade - 9; q++ ){
-                             Random aleatorio = new Random();
-                                valor = aleatorio.nextInt((TAMANHO_MAXIMO - 1) + 1) + 1;
-                                linha = aleatorio.nextInt((TAMANHO_MAXIMO - 1 - 0) + 1) + 0;
-                                coluna = aleatorio.nextInt((TAMANHO_MAXIMO - 1 - 0) + 1) + 0;
-                                if (preencherTabuleiro(matr, linha, coluna) == true) {
-                                    matr[linha][coluna] = valor;
-                                    break;
-                                }
-                        }
-                        */
-                        /*
-                        for (int i = 0; i < quantidade - 9; i++) {
-                            for (;;) {
-                                Random aleatorio = new Random();
-                                valor = aleatorio.nextInt((TAMANHO_MAXIMO - 1) + 1) + 1;
-                                linha = aleatorio.nextInt((TAMANHO_MAXIMO - 1 - 0) + 1) + 0;
-                                coluna = aleatorio.nextInt((TAMANHO_MAXIMO - 1 - 0) + 1) + 0;
-                                if (ehValido(valor, linha, coluna) == true) {
-                                    matr[linha][coluna] = valor;
-                                    break;
-                                }
-                            }
-                        }
-                        */
-
-
+ 
