@@ -77,16 +77,19 @@ public class jogo {
             String quantidadeString = JOptionPane.showInputDialog("Digite a quantidade de números para serem sorteados[0-60]: ");
             try {
                 int quantidade = Integer.parseInt(quantidadeString);
-                //int valor, linha, coluna;
                 if (quantidade <= 60 && quantidade >= 0) {
                     if (quantidade >= 9) {
                         //Prencho a diagonal toda
                         preenchDiagonal(9);
                         solucaoSudoku();
+                        System.out.println("saiu da solucao sudoku");
+                        criaTabuleiro(quantidade);
                     }
                     else{
                         // Preenche diagonal principal do tabuleiro com o numero passado de números aleatórios de 1 a 9 
                         preenchDiagonal(quantidade);
+                        solucaoSudoku();
+                        criaTabuleiro(0);
                     }
                 } else {
                     JOptionPane.showMessageDialog(null, "Entrada inválida, pois o numero eata fora do intervalo. O jogo sera inicaido com o tabuleiro vazio.");
@@ -137,13 +140,12 @@ public class jogo {
     private boolean solucaoSudoku(){
         
         boolean verifica = false;
-        int linha = -1 , coluna = -1;
-        while (verifica == false) {
-            for ( linha = 0; linha < TAMANHO_MAXIMO; linha++) {
-                for ( coluna = 0; coluna < TAMANHO_MAXIMO; coluna++) {
-                    if (matr[linha][coluna] == 0) {
-                        verifica = true;
-                    }
+        int linha = -1, coluna = -1;
+        for (linha = 0; linha < TAMANHO_MAXIMO && verifica == false; linha++) {
+            for (coluna = 0; coluna < TAMANHO_MAXIMO; coluna++) {
+                if (matr[linha][coluna] == 0) {
+                    verifica = true;
+                    break;
                 }
             }
         }
@@ -151,14 +153,21 @@ public class jogo {
         if(linha == -1){
             return true;
         }
-        
+        System.out.println(linha + "--- "+coluna);
         for(int numero = 1; numero <= 9; numero++){
-            if(ehValido(numero, linha, coluna) == true){
-                return true;
+            imprime(matr);
+            System.out.println(linha + " "+coluna);
+            if(ehValido(numero, linha, coluna)){
+                matr[linha][coluna] = numero;
+                imprime(matr);
+                if(solucaoSudoku()==true){
+                    return true;
+                }
             }
             
             matr[linha][coluna] = 0;
         }
+         System.out.println("retorno do solucao do sudoku");
         return false;
     }
     
@@ -172,6 +181,7 @@ public class jogo {
                 indice++;
             }
         }
+        System.out.println("estou na preenche diagonal");
     }
 
     private boolean numeroNaPosicao(int linha, int coluna) {
