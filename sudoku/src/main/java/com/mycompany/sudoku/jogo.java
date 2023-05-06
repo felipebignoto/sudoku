@@ -324,6 +324,9 @@ public class jogo {
     private static int menuInicial() {
         Object[] options = {"Jogo aleatório", "Definir jogo"};
         int x = JOptionPane.showOptionDialog(null, "Selecione uma opção:", "Olá, seja bem vindo ao sudoku!", JOptionPane.DEFAULT_OPTION, JOptionPane.INFORMATION_MESSAGE, null, options, options[0]);
+        if(x != 0 || x!=1) {
+            REINICIAR = false;
+        }
         return x;
     }
 
