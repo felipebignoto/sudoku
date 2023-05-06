@@ -8,21 +8,27 @@ public class jogo {
     private final int TAMANHO_MAXIMO = 9;
     private int[][] matr = new int[9][9];
     private final int[][] tabuleiro = new int[9][9];
+    private static boolean REINICIAR = true;
 
     public void main(String[] args) {
 
-        int x = menuInicial();
-        if (x == 0 || x == 1) {
-            inicioJogo(x);
-            System.out.println("Seu jogo incial eh: ");
-            imprime(tabuleiro);
-            jogadas();
-            
+       criandoJogo();
+    }
+    
+    private void criandoJogo() {
+        while(REINICIAR == true)  {
+            int x = menuInicial();
+            if (x == 0 || x == 1) {
+                inicioJogo(x);
+                System.out.println("Seu jogo incial eh: ");
+                imprime(tabuleiro);
+                jogadas();
 
-        } else {
-            JOptionPane.showMessageDialog(null, "Saindo");
+            } else {
+                JOptionPane.showMessageDialog(null, "Saindo");
+            }
+            JOptionPane.showMessageDialog(null, "Jogo finalizado!");
         }
-        JOptionPane.showMessageDialog(null, "Jogo finalizado!");
     }
     
     private void verificaJogo(){
@@ -122,11 +128,17 @@ public class jogo {
                     System.out.println("tabulerio");
                     imprime(tabuleiro);
                     //verifico se a matr tem solução
-                    if(solucaoSudoku() == true){
-                        if(verificaSeJogoEstaCompleto() == true){
+                    if (solucaoSudoku() == true) {
+                        if (verificaSeJogoEstaCompleto() == true) {
+                            x = 3;
                             JOptionPane.showMessageDialog(null, "Parabens, voce ganhou!!!");
-                            x=3;
-                            //Cahmo a nova função
+                            //Chamo a nova função
+                            Object[] opcao = {"Inicar novo jogo", "Sair"};
+                            int opcaoEscolhida = JOptionPane.showOptionDialog(null, "*Selecione uma opção:", "Menu!", JOptionPane.DEFAULT_OPTION, JOptionPane.INFORMATION_MESSAGE, null, opcao, opcao[0]);
+                            if(opcaoEscolhida != 0){
+                                REINICIAR = false;
+                                
+                            }
                         }
                         else{
                             JOptionPane.showMessageDialog(null, "tabuleiro verificado e tem solucao.");
@@ -140,15 +152,17 @@ public class jogo {
 
                 case 3://sair por opção
                     JOptionPane.showMessageDialog(null, "Saindo...");
+                    REINICIAR = false;
                     break;
 
                 default://sair por entrada inválida
                     if (x != 3) {
                         JOptionPane.showMessageDialog(null, "Saindo...");
                     }
+                    REINICIAR = false;
                     break;
             }
-        } while (x == 0 || x == 1 || x == 2);
+        } while ((x == 0 || x == 1 || x == 2));
     }
 
     private void inicioJogo(int x) {
@@ -182,7 +196,7 @@ public class jogo {
                     coluna = Character.getNumericValue(valoresInicias.charAt(7 * i + 3));
                     valor = Character.getNumericValue(valoresInicias.charAt(7 * i + 5));
                     if (ehValido(valor, linha, coluna) == true) {
-                        matr[linha][coluna] = valor;
+                        tabuleiro[linha][coluna] = valor;
                     }
                 }
             }catch(Exception err){
