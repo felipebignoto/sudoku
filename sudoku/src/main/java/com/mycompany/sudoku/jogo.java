@@ -24,6 +24,67 @@ public class jogo {
         }
         JOptionPane.showMessageDialog(null, "Jogo finalizado!");
     }
+    
+    private void verificaJogo(){
+        
+        boolean verifica = false;
+        
+ 
+        for (int linha = 0; linha < TAMANHO_MAXIMO; linha++) {
+            for (int coluna = 0; coluna < TAMANHO_MAXIMO; coluna++) {
+                
+                if(matr[linha][coluna] != 0){
+                    int auxiliar = matr[linha][coluna];
+                    matr[linha][coluna] =0;
+                    if (numeroNaPosicao(linha, coluna) == true) {
+                        verifica = true;
+                        matr[linha][coluna] = auxiliar;
+                        JOptionPane.showMessageDialog(null, "Jogo invalido, erro na posicao: (" + linha + "," + coluna + ").");
+                        break;
+                    }
+                      
+                    if (numeroNaLinha(auxiliar, linha)) {
+                        verifica = true;
+                        matr[linha][coluna] = auxiliar;
+                        JOptionPane.showMessageDialog(null, "Jogo invalido, erro na linha: (" + linha + "," + coluna + ").");
+                        break;
+                    }
+
+                    if (numeroNoBloco(auxiliar, linha, coluna)) {
+                        verifica = true;
+                        matr[linha][coluna] = auxiliar;
+                        JOptionPane.showMessageDialog(null, "Jogo invalido, erro no bloco: (" + linha + "," + coluna + ").");
+                        break;
+                    }
+                    
+                    if (numeroNaColuna(auxiliar, coluna)) {
+                        verifica = true;
+                        matr[linha][coluna] = auxiliar;
+                        JOptionPane.showMessageDialog(null, "Jogo invalido, erro na coluna: (" + linha + "," + coluna + ").");
+                        break;
+                    }
+                }
+            }
+
+            if (verifica) {
+                break;
+            }
+            
+        }
+        
+        
+    }
+    
+    private boolean verificaSeJogoEstaCompleto(){
+        for(int i = 0; i< TAMANHO_MAXIMO; i++){
+            for(int j =0; j< TAMANHO_MAXIMO; j++){
+                if(tabuleiro[i][j] == 0){
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
 
     private void jogadas() {
         Object[] options = {"Adicionar jogada", "Remover jogada", "Verificar", "Sair"};
@@ -37,21 +98,44 @@ public class jogo {
                     linha = Character.getNumericValue(valoresParaAdicionar.charAt(1));
                     coluna = Character.getNumericValue(valoresParaAdicionar.charAt(3));
                     valor = Character.getNumericValue(valoresParaAdicionar.charAt(5));
-                    matr[linha][coluna] = valor;
+                    tabuleiro[linha][coluna] = valor;
                     System.out.println();
-                    imprime(matr);
+                    imprime(tabuleiro);
                     break;
 
                 case 1: // remover jogada
                     String valoreParaRemover = JOptionPane.showInputDialog("Digite os valores no formato ([linha],[coluna]): ");
                     linha = Character.getNumericValue(valoreParaRemover.charAt(1));
                     coluna = Character.getNumericValue(valoreParaRemover.charAt(3));
-                    matr[linha][coluna] = 0;
+                    tabuleiro[linha][coluna] = 0;
                     System.out.println();
-                    imprime(matr);
+                    imprime(tabuleiro);
                     break;
 
                 case 2://verificar
+                    //copio o tabuleiro para a matriz
+                    for(int i = 0; i<TAMANHO_MAXIMO;i++){
+                        for(int j =0; j< TAMANHO_MAXIMO;j++){
+                            matr[i][j] = tabuleiro[i][j];
+                        }
+                    }
+                    System.out.println("tabulerio");
+                    imprime(tabuleiro);
+                    //verifico se a matr tem solução
+                    if(solucaoSudoku() == true){
+                        if(verificaSeJogoEstaCompleto() == true){
+                            JOptionPane.showMessageDialog(null, "Parabens, voce ganhou!!!");
+                            x=3;
+                            //Cahmo a nova função
+                        }
+                        else{
+                            JOptionPane.showMessageDialog(null, "tabuleiro verificado e tem solucao.");
+                        }
+                    }
+                    else{
+                        verificaJogo();
+                        JOptionPane.showMessageDialog(null, "tabuleiro verificado e nao tem solucao.");
+                    }
                     break;
 
                 case 3://sair por opção
@@ -71,10 +155,10 @@ public class jogo {
         if (x == 0) {//selecionou o jogo aleatorio
             criaMatriz(matr);
             
-            String quantidadeString = JOptionPane.showInputDialog("Digite a quantidade de números para serem sorteados[0-60]: ");
+            String quantidadeString = JOptionPane.showInputDialog("Digite a quantidade de números para serem sorteados[0-81]: ");
             try {
                 int quantidade = Integer.parseInt(quantidadeString);
-                if (quantidade <= 60 && quantidade >= 0) {
+                if (quantidade <= 81 && quantidade >= 0) {
                     preenchDiagonal();
                     solucaoSudoku();
                     criaTabuleiro(quantidade);
@@ -130,15 +214,12 @@ public class jogo {
         boolean verifica = false;
         int linha;
         int coluna= 0;
-        for (linha = 0; (linha < TAMANHO_MAXIMO); linha++) {
-            for (coluna = 0; (coluna < TAMANHO_MAXIMO) ; coluna++) {
-                System.out.println(linha + " " + coluna + " " + matr[linha][coluna]);
-
+        for (linha = 0; linha < TAMANHO_MAXIMO; linha++) {
+            for (coluna = 0; coluna < TAMANHO_MAXIMO ; coluna++) {
                 if (matr[linha][coluna] == 0) {
                     verifica = true;
                     break;
                 }
-                
             }
             if(verifica){
                     break;
@@ -149,13 +230,9 @@ public class jogo {
             return true;
         }
         for(int numero = 1; numero <= 9; numero++){
-            //imprime(matr);
 
             if(ehValido(numero, linha, coluna)==true){
-                imprime(matr);
-                System.out.println("-----");
                 matr[linha][coluna] = numero;
-                //imprime(matr);
 
                 if(solucaoSudoku()==true){
                     return true;
@@ -164,7 +241,6 @@ public class jogo {
             
             matr[linha][coluna] = 0;
         }
-         System.out.println("retorno do solucao do sudoku");
         return false;
     }
     
@@ -178,7 +254,6 @@ public class jogo {
                 indice++;
             }
         }
-        System.out.println("estou na preenche diagonal");
     }
 
     private boolean numeroNaPosicao(int linha, int coluna) {
