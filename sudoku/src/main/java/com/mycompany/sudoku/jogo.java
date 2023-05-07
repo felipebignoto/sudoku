@@ -134,7 +134,7 @@ public class jogo {
                     imprime(tabuleiro);
                     //verifico se a matr tem solução
                     if (solucaoSudoku() == true ) {
-                        if (verificaSeJogoEstaCompleto() == true) {
+                        if (verificaSeJogoEstaCompleto() == true && verificaJogo() == true) {
                             x = 4;
                             JOptionPane.showMessageDialog(null, "Parabens, voce ganhou!!!");
                             //Chamo a nova função
