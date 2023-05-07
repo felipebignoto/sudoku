@@ -17,7 +17,6 @@ public class jogo {
     
     private void criandoJogo() {
         while(REINICIAR == true)  {
-            System.out.println("criando");
             int x = menuInicial();
             if (x == 0 || x == 1) {
                 inicioJogo(x);
@@ -111,7 +110,7 @@ public class jogo {
                     coluna = Character.getNumericValue(valoresParaAdicionar.charAt(3));
                     valor = Character.getNumericValue(valoresParaAdicionar.charAt(5));
                     tabuleiro[linha][coluna] = valor;
-                    System.out.println();
+                    System.out.println("tabulerio:");
                     imprime(tabuleiro);
                     break;
 
@@ -120,7 +119,7 @@ public class jogo {
                     linha = Character.getNumericValue(valoreParaRemover.charAt(1));
                     coluna = Character.getNumericValue(valoreParaRemover.charAt(3));
                     tabuleiro[linha][coluna] = 0;
-                    System.out.println();
+                    System.out.println("tabulerio:");
                     imprime(tabuleiro);
                     break;
 
@@ -131,7 +130,7 @@ public class jogo {
                             matr[i][j] = tabuleiro[i][j];
                         }
                     }
-                    System.out.println("tabulerio");
+                    System.out.println("tabulerio:");
                     imprime(tabuleiro);
                     //verifico se a matr tem solução
                     if (solucaoSudoku() == true ) {
@@ -331,7 +330,6 @@ public class jogo {
     }
     
     private static int menuInicial() {
-        System.out.println("menu");
         Object[] options = {"Jogo aleatório", "Definir jogo"};
         int x = JOptionPane.showOptionDialog(null, "Selecione uma opção:", "Olá, seja bem vindo ao sudoku!", JOptionPane.DEFAULT_OPTION, JOptionPane.INFORMATION_MESSAGE, null, options, options[0]);
         if(x != 0 && x!=1) {
